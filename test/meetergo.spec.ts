@@ -217,6 +217,28 @@ describe('booking webhook lifecycle', () => {
 			description: 'n8n meetergo Trigger',
 		});
 	});
+	it('accepts numeric production webhook IDs throughout activation and cleanup', async () => {
+		const endpoint = 'https://n8n.example.com/webhook/unique-workflow-id';
+		const hook = { id: 1492, endpoint, eventTypes: ['booking_created'] };
+		const { ctx, state, requests } = context({ events: ['booking_created'] }, [
+			hook, [hook], [hook], undefined,
+		]);
+		expect(await methods.create.call(ctx)).toBe(true);
+		expect(await methods.checkExists.call(ctx)).toBe(true);
+		await methods.delete.call(ctx);
+		expect(requests.filter((r) => r.method === 'DELETE').map((r) => r.url)).toEqual([
+			'https://api.meetergo.com/webhooks/1492',
+		]);
+		expect(state).toEqual({});
+	});
+	it('matches numeric IDs after static data has been serialized as text', async () => {
+		const endpoint = 'https://n8n.example.com/webhook/unique-workflow-id';
+		const { ctx, state } = context({ events: ['booking_created'] }, [
+			[{ id: 1492, endpoint, eventTypes: ['booking_created'] }],
+		]);
+		state.webhookId = '1492';
+		expect(await methods.checkExists.call(ctx)).toBe(true);
+	});
 	it('detects event selection changes', async () => {
 		const { ctx, state } = context({ events: ['booking_cancelled'] }, [
 			[

@@ -58,7 +58,7 @@ export class MeetergoTrigger implements INodeType {
 				const events = this.getNodeParameter('events') as string[];
 				return hooks.some(
 					(h) =>
-						h.id === state.webhookId &&
+						String(h.id) === String(state.webhookId) &&
 						h.endpoint === this.getNodeWebhookUrl('default') &&
 						Array.isArray(h.eventTypes) &&
 						h.eventTypes.length === events.length &&
@@ -78,7 +78,7 @@ export class MeetergoTrigger implements INodeType {
 					throw new NodeOperationError(this.getNode(), 'Select at least one booking event');
 				if (state.webhookId) {
 					const hooks = (await apiRequest(this, 'GET', '/webhooks')) as IDataObject[];
-					if (hooks.some((h) => h.id === state.webhookId && h.endpoint === state.webhookUrl)) {
+					if (hooks.some((h) => String(h.id) === String(state.webhookId) && h.endpoint === state.webhookUrl)) {
 						await apiRequest(
 							this,
 							'DELETE',
@@ -93,9 +93,12 @@ export class MeetergoTrigger implements INodeType {
 					eventTypes: events,
 					description: 'n8n meetergo Trigger',
 				})) as IDataObject;
-				if (typeof hook.id !== 'string')
+				if (
+					!(typeof hook.id === 'string' && hook.id.trim()) &&
+					!(typeof hook.id === 'number' && Number.isSafeInteger(hook.id) && hook.id > 0)
+				)
 					throw new NodeOperationError(this.getNode(), 'meetergo did not return a webhook ID');
-				state.webhookId = hook.id;
+				state.webhookId = String(hook.id);
 				state.webhookUrl = endpoint;
 				return true;
 			},
@@ -103,7 +106,7 @@ export class MeetergoTrigger implements INodeType {
 				const state = this.getWorkflowStaticData('node');
 				if (!state.webhookId) return true;
 				const hooks = (await apiRequest(this, 'GET', '/webhooks')) as IDataObject[];
-				if (hooks.some((h) => h.id === state.webhookId && h.endpoint === state.webhookUrl)) {
+				if (hooks.some((h) => String(h.id) === String(state.webhookId) && h.endpoint === state.webhookUrl)) {
 					await apiRequest(
 						this,
 						'DELETE',

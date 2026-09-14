@@ -1,6 +1,6 @@
 {
 	"name": "n8n-nodes-meetergo",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Official meetergo integration for scheduling, contacts and booking event workflows.",
 	"license": "MIT",
 	"homepage": "https://meetergo.com",

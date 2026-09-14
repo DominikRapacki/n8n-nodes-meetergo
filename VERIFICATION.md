@@ -4,9 +4,9 @@ Checked 2026-09-14.
 
 - n8n 2.38.7, installed from the actual npm tarball in an isolated local container.
 - n8n-node build, lint, and TypeScript typecheck passed.
-- Vitest: 21 tests passed.
+- Vitest: 23 tests passed.
 - Tarball: 22 files, no runtime dependencies or embedded credentials.
-- SHA-256: e1110c8ce4615e36474584b33e22725eefe89f4b893ec14a3fc67b4b0b13e6b3
+- Original 0.1.0 tarball SHA-256: e1110c8ce4615e36474584b33e22725eefe89f4b893ec14a3fc67b4b0b13e6b3
 
 ## Live API verification
 
@@ -37,11 +37,25 @@ Three regression cases cover empty string, null and undefined response bodies.
 
 ## Trigger coverage and limits
 
-Fixture tests cover registration, changed events, endpoint ownership during
-cleanup, event filtering, cancellation scope, pagination, repeated pages,
-malformed records and item pairing. Actual public webhook delivery has not been
-tested from the local-only review instance. Do not represent fixture coverage as
-a live webhook delivery check.
+Fixture tests cover registration, numeric production IDs, serialized IDs, changed
+events, endpoint ownership during cleanup, event filtering, cancellation scope,
+pagination, repeated pages, malformed records and item pairing.
+
+Live public HTTPS delivery was verified on 2026-09-14 using n8n 2.38.7 and the
+0.1.1 trigger fix. The original 0.1.0 trigger rejected numeric webhook IDs from
+the API. The patch accepts numeric IDs and compares persisted IDs consistently.
+
+- Workflow activation registered webhook 1500.
+- Execution 2: booking_created, success.
+- Execution 3: booking_rescheduled, success.
+- Execution 4: booking_cancelled, success.
+- Deactivation removed its hook. API readback returned zero remaining hooks.
+- Two orphaned hooks from the failed 0.1.0 activation attempts were removed.
+- The synthetic booking was cancelled.
+
+An actual AI Agent execution also passed using the meetergo node as a tool and
+a local Ollama model. Execution 1 contains the tool call, live API result, and
+agent response. No simulated model or fixture API was used for that execution.
 
 ## Publication
 
