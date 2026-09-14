@@ -108,6 +108,10 @@ describe('meeting type picker', () => {
 });
 
 describe('operations', () => {
+	it.each(['', null, undefined])('returns valid workflow JSON after an empty update response %s', async (response) => {
+		const { ctx } = context({ resource: 'contact', operation: 'update', id: 'fixture', options: { notes: 'updated' } }, [response]);
+		expect(await new Meetergo().execute.call(ctx)).toEqual([[{ json: { success: true }, pairedItem: { item: 0 } }]]);
+	});
 	it('preserves item pairing across inputs', async () => {
 		const { ctx } = context(
 			{ resource: 'appointment', operation: 'get', id: 'booking' },

@@ -13,7 +13,7 @@ export async function apiRequest(
 	body?: IDataObject,
 	qs: IDataObject = {},
 ): Promise<IDataObject | IDataObject[] | undefined> {
-	return await context.helpers.httpRequestWithAuthentication.call(context, 'meetergoApi', {
+	const response: unknown = await context.helpers.httpRequestWithAuthentication.call(context, 'meetergoApi', {
 		method,
 		url: `https://api.meetergo.com${path}`,
 		qs,
@@ -21,6 +21,9 @@ export async function apiRequest(
 		json: true,
 		timeout: 30000,
 	});
+	if (response === '' || response === null || response === undefined) return undefined;
+	if (typeof response !== 'object') throw new Error('Unexpected meetergo API response');
+	return response as IDataObject | IDataObject[];
 }
 export async function getMany(
 	context: ApiContext,
