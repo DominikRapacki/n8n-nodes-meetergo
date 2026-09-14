@@ -31,7 +31,7 @@ export class Meetergo implements INodeType {
 			async getMeetingTypes(this: ILoadOptionsFunctions) {
 				const records = (await apiRequest(this, 'GET', '/v4/meeting-type')) as IDataObject[];
 				return records.map((record) => ({
-					name: String(record.name || record.id),
+					name: String((record.meetingInfo as IDataObject | undefined)?.name || record.id),
 					value: String(record.id),
 				}));
 			},

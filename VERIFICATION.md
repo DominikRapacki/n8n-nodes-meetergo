@@ -5,11 +5,11 @@ Checked 2026-09-14.
 - n8n-node build: passed.
 - n8n-node lint --fix: passed, zero lint errors or warnings.
 - TypeScript typecheck: passed.
-- Vitest 4.1.10: 17 tests passed.
+- Vitest 4.1.10: 18 tests passed.
 - npm pack: 22 files; node JavaScript, metadata and both icon variants included.
 - No runtime dependencies or embedded credentials.
 - Tarball: /tmp/n8n-nodes-meetergo-0.1.0.tgz
-- SHA-256: 48a8f2eea9edb82cde4414159d993e313fbc6006f0fafb61bb75e85de44bf506
+- SHA-256: bf5290585103e3435e7ddf13fa7d3f924a393407877553e392b7faa9b1144ab3
 
 Tests cover appointment page zero, contact page one, constant page sizes, limits,
 empty results, malformed records, repeated pages, multi-item pairing, required
@@ -46,7 +46,8 @@ npm CLI authentication is verified as dominikrapacki. GitHub CLI is signed in as
 DominikRapacki, which is the selected public source repository owner. Creator
 Portal account meetergo is verified and its node submission form is accessible.
 The form requires the URL of an already published npm package.
-Public repository creation, npm publication and directory review are in progress;
+Public repository https://github.com/DominikRapacki/n8n-nodes-meetergo is available.
+Initial GitHub Actions verification passed. npm publication and directory review remain pending;
 no release tag or npm version has been published.
 
 This is a release candidate, not an npm release or verified directory listing.

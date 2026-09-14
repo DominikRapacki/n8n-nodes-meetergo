@@ -3,6 +3,7 @@ import type {
 	IDataObject,
 	IExecuteFunctions,
 	IHookFunctions,
+	ILoadOptionsFunctions,
 	IHttpRequestOptions,
 	IWebhookFunctions,
 } from 'n8n-workflow';
@@ -84,6 +85,25 @@ describe('pagination', () => {
 	it('rejects malformed records instead of silently returning incomplete data', async () => {
 		const { ctx } = context({}, [{ result: [{ item: { email: 'fixture@example.com' } }] }]);
 		await expect(getMany(ctx, 'contact', 50, {})).rejects.toThrow('without an ID');
+	});
+});
+
+describe('meeting type picker', () => {
+	it('uses the name in the v4 API meetingInfo response', async () => {
+		const { ctx } = context({}, [
+			[
+				{ id: 'intro', meetingInfo: { name: 'Intro call', duration: 30 } },
+				{ id: 'unnamed', meetingInfo: {} },
+			],
+		]);
+		expect(
+			await new Meetergo().methods.loadOptions.getMeetingTypes.call(
+				ctx as unknown as ILoadOptionsFunctions,
+			),
+		).toEqual([
+			{ name: 'Intro call', value: 'intro' },
+			{ name: 'unnamed', value: 'unnamed' },
+		]);
 	});
 });
 
