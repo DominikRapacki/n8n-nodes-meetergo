@@ -21,7 +21,7 @@ export class MeetergoApi implements ICredentialType {
 			required: true,
 			default: '',
 			description:
-				'Create a personal access token in your meetergo API settings. The token acts as its owner.',
+				'Create a personal access token in your meetergo API settings. Include Scheduling permission for connection testing, CRM for contact operations and Account for triggers. The token acts as its owner.',
 		},
 	];
 	authenticate: IAuthenticateGeneric = {
@@ -29,6 +29,6 @@ export class MeetergoApi implements ICredentialType {
 		properties: { headers: { Authorization: '=Bearer {{$credentials.accessToken}}' } },
 	};
 	test: ICredentialTestRequest = {
-		request: { baseURL: 'https://api.meetergo.com', url: '/auth', method: 'GET' },
+		request: { baseURL: 'https://api.meetergo.com', url: '/v4/meeting-type', method: 'GET' },
 	};
 }

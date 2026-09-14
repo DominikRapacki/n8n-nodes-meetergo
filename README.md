@@ -101,3 +101,10 @@ See [RELEASE.md](RELEASE.md) for the remaining release gates.
 ## License
 
 MIT
+
+### Limited token permissions
+
+The connection test reads your meeting types and requires Scheduling permission.
+Contact operations also require CRM permission. Booking event triggers require
+Account permission to register and remove their own webhooks. Grant only the
+areas used by your workflows. A token acts with its owner's permissions.
