@@ -16,8 +16,8 @@ For local review, run `npm ci`, `npm run build`, then `npm run dev`.
 ## Credentials
 
 Create a personal access token in your meetergo API settings, then paste it
-into the **Meetergo API** credential in n8n. The credential test checks the
-authenticated user through `GET /auth`.
+into the **Meetergo API** credential in n8n. The credential test reads your
+meeting types via `GET /v4/meeting-type` and requires Scheduling permission.
 
 A personal access token acts as its owner. The owner's role, workspace and
 plan determine which records and features the workflow can access.
